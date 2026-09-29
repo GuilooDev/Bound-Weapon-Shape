@@ -1,4 +1,4 @@
 #pragma once
 
-void __stdcall RenderMenuFunction();
+void __stdcall RenderSettingsMenuFunction();
 void RegisterMenu();

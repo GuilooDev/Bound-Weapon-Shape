@@ -32,7 +32,9 @@ endif()
 
 # Setup your SKSE plugin as an SKSE plugin!
 find_package(CommonLibSSE CONFIG REQUIRED)
-add_commonlibsse_plugin(${PROJECT_NAME} SOURCES src/plugin.cpp src/logger.h src/SKSEMenuFramework.h src/UI.cpp) # <--- specifies plugin.cpp
+file(GLOB SOURCE_FILES CONFIGURE_DEPENDS "src/*.cpp" "src/*.h")
+
+add_commonlibsse_plugin(${PROJECT_NAME} SOURCES ${SOURCE_FILES}) # <--- specifies plugin.cpp
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23) # <--- use C++23 standard
 target_precompile_headers(${PROJECT_NAME} PRIVATE PCH.h) # <--- PCH.h is required!
 
