@@ -1,4 +1,8 @@
 #pragma once
 
-void __stdcall RenderSettingsMenuFunction();
-void RegisterMenu();
+
+namespace UI {
+    void __stdcall RenderSettingsMenuFunction();
+    void RegisterMenu();
+    void PopulateItemsLists();
+}

@@ -3,25 +3,31 @@
 #include "logger.h" 
 #include "ShapeChange.h"
 
+namespace UI {
+    bool bCheck;
 
-bool bCheck;
+    int selectedSword = 0;
+    std::vector<const char*> swordMenuArray;
 
-int selectedSword = 0;
-const char* swordMenuArray[]{"Sword1", "Sword2"};
+    void __stdcall RenderSettingsMenuFunction() {
+        if (ImGuiMCP::Checkbox("Checkbox", &bCheck)) {
+            logger::info("Checkbox is {}", bCheck);
+        }
 
-void __stdcall RenderSettingsMenuFunction() {
-    if (ImGuiMCP::Checkbox("Checkbox", &bCheck)) {
-        logger::info("Checkbox is {}", bCheck);
+        if (ImGuiMCP::Combo("Sword List", &selectedSword, swordMenuArray.data(), std::size(swordMenuArray))) {
+            logger::info("Sword Selected is {}, FID is {:08X}, plugin name is {}", swordMenuArray[selectedSword], ShapeChange::GetSwordEditorID(selectedSword), ShapeChange::GetSwordFileName(selectedSword));
+        }
     }
 
-    if (ImGuiMCP::Combo("Sword List", &selectedSword, swordMenuArray, std::size(swordMenuArray))) {
-        logger::info("Sword Selected is {}", swordMenuArray[selectedSword]);
+    void PopulateItemsLists() {
+        // For 1H Swords
+        for (auto* sword : ShapeChange::GetOneHSwordsList()) {
+            swordMenuArray.push_back(sword->GetFullName());
+        }
     }
 
-    
-}
-
-void RegisterMenu() { 
-	SKSEMenuFramework::SetSection("Bound Weapon Shape"); 
-	SKSEMenuFramework::AddSectionItem("Settings", RenderSettingsMenuFunction);
+    void RegisterMenu() {
+        SKSEMenuFramework::SetSection("Bound Weapon Shape");
+        SKSEMenuFramework::AddSectionItem("Settings", RenderSettingsMenuFunction);
+    }
 }

@@ -18,7 +18,8 @@ WEAPON Record
 void OnDataLoadedMessage(SKSE::MessagingInterface::Message* message) { 
     
     if (message->type == SKSE::MessagingInterface::kDataLoaded) {
-        ShapeChange::initSwordList();
+        ShapeChange::initWeaponsLists();
+        UI::PopulateItemsLists();
     }
 
 }
@@ -27,8 +28,8 @@ void OnDataLoadedMessage(SKSE::MessagingInterface::Message* message) {
 SKSEPluginLoad(const SKSE::LoadInterface *skse) {
     SKSE::Init(skse);
     SetupLog();
-    RegisterMenu();
-
+    UI::RegisterMenu();
+    
     SKSE::GetMessagingInterface()->RegisterListener(OnDataLoadedMessage);
    
     return true;
