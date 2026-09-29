@@ -4,5 +4,6 @@
 
 namespace ShapeChange {
 
-    void initSwordList();
+    void initWeaponsLists();
+    std::vector<RE::TESObjectWEAP*>& GetOneHSwordsList();
 }
