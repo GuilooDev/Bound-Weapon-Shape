@@ -8,6 +8,7 @@ namespace ShapeChange {
             RE::BGSKeyword* keyword = nullptr;
             std::vector<RE::TESObjectWEAP*> weapons;
             std::vector<RE::TESObjectWEAP*> boundWeapons;
+            RE::TESObjectWEAP* selectedShape = nullptr;
         };
 
 
@@ -109,6 +110,22 @@ namespace ShapeChange {
         return filename->GetFilename();
     }
 
+    void SetSelectedShape(std::string_view categoryName, int index) {
+        auto& category = categories[categoryName];
+        if (index < 0 || index >= static_cast<int>(category.weapons.size())) {
+            return;
+        }
+
+        category.selectedShape = category.weapons[index];
+        logger::info("Selected shape model path: {}", category.selectedShape->GetModel());
+
+        for (auto* boundWeapon : category.boundWeapons) {
+            boundWeapon->SetModel(category.selectedShape->GetModel());
+            logger::info("Bound weapon {:08X} model is now: {}", boundWeapon->GetFormID(), boundWeapon->GetModel());
+        }
+    }
+
+    
     
 }
 
