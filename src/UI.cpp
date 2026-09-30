@@ -6,23 +6,34 @@
 namespace UI {
     bool bCheck;
 
-    int selectedSword = 0;
-    std::vector<const char*> swordMenuArray;
+    std::vector<std::string_view> categoryOrder;
+    std::unordered_map<std::string_view, int> selectedIndexByCategory;
+    std::unordered_map<std::string_view, std::vector<const char*>> menuArrayByCategory;
 
     void __stdcall RenderSettingsMenuFunction() {
         if (ImGuiMCP::Checkbox("Checkbox", &bCheck)) {
             logger::info("Checkbox is {}", bCheck);
         }
 
-        if (ImGuiMCP::Combo("Sword List", &selectedSword, swordMenuArray.data(), std::size(swordMenuArray))) {
-            logger::info("Sword Selected is {}, FID is {:08X}, plugin name is {}", swordMenuArray[selectedSword], ShapeChange::GetSwordEditorID(selectedSword), ShapeChange::GetSwordFileName(selectedSword));
+        for (auto& categoryName : categoryOrder) {
+            auto& menuArray = menuArrayByCategory[categoryName];
+            int& selectedIndex = selectedIndexByCategory[categoryName];
+
+            if (ImGuiMCP::Combo(categoryName.data(), &selectedIndex, menuArray.data(), std::size(menuArray))) {
+                logger::info("Selected {} in category {}, FID is {:08X}, plugin is {}", menuArray[selectedIndex],
+                             categoryName, ShapeChange::GetWeaponFormID(categoryName, selectedIndex),
+                             ShapeChange::GetWeaponFileName(categoryName, selectedIndex));
+            }
         }
     }
 
     void PopulateItemsLists() {
-        // For 1H Swords
-        for (auto* sword : ShapeChange::GetOneHSwordsList()) {
-            swordMenuArray.push_back(sword->GetFullName());
+        categoryOrder = ShapeChange::GetCategoryNames();
+        for (auto& categoryName : categoryOrder) {
+            auto& menuArray = menuArrayByCategory[categoryName];
+            for (auto* weapon : ShapeChange::GetWeaponsList(categoryName)) {
+                menuArray.push_back(weapon->GetFullName());
+            }
         }
     }
 

@@ -18,7 +18,7 @@ WEAPON Record
 void OnDataLoadedMessage(SKSE::MessagingInterface::Message* message) { 
     
     if (message->type == SKSE::MessagingInterface::kDataLoaded) {
-        ShapeChange::initWeaponsLists();
+        ShapeChange::InitWeaponsLists();
         UI::PopulateItemsLists();
     }
 
