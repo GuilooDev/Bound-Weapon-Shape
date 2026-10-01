@@ -8,6 +8,7 @@ namespace ShapeChange {
             RE::BGSKeyword* keyword = nullptr;
             std::vector<RE::TESObjectWEAP*> weapons;
             std::vector<RE::TESObjectWEAP*> boundWeapons;
+            RE::TESObjectWEAP* selectedShape = nullptr;
         };
 
 
@@ -32,7 +33,7 @@ namespace ShapeChange {
             std::sort(weaponList.begin(), weaponList.end(), [](RE::TESObjectWEAP* a, RE::TESObjectWEAP* b) {
                 std::string_view nameA = a->GetFullName();
                 std::string_view nameB = b->GetFullName();
-                //On enlève les espaces blancs
+                //On enlï¿½ve les espaces blancs
                 nameA.remove_prefix(std::min(nameA.find_first_not_of(' '), nameA.size()));
                 nameB.remove_prefix(std::min(nameB.find_first_not_of(' '), nameB.size()));
 
@@ -79,7 +80,7 @@ namespace ShapeChange {
             }
         }
 
-        // Ordre Alphabétique
+        // Ordre Alphabï¿½tique
         for (auto& [name, category] : categories) {
             SortWeaponsAlphabetically(category.weapons);
             logger::info("{} list contains {} entries", name, category.weapons.size());
@@ -109,6 +110,30 @@ namespace ShapeChange {
         return filename->GetFilename();
     }
 
-    
+    void SetSelectedShape(std::string_view categoryName, int index) {
+        auto& category = categories[categoryName];
+        if (index < 0 || index >= static_cast<int>(category.weapons.size())) {
+            return;
+        }
+
+        category.selectedShape = category.weapons[index];
+        logger::info("Selected shape for {}: {} ({})", categoryName, category.selectedShape->GetFullName(),
+                     category.selectedShape->GetModel());
+    }
+
+    RE::TESObjectWEAP* GetSelectedShapeForWeapon(RE::TESObjectWEAP* weapon) {
+        if (!weapon) {
+            return nullptr;
+        }
+
+        for (auto& [name, category] : categories) {
+            if (category.keyword && weapon->HasKeyword(category.keyword)) {
+                return category.selectedShape;
+            }
+        }
+
+        return nullptr;
+    }
+
 }
 
