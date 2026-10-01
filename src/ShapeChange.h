@@ -11,6 +11,8 @@ namespace ShapeChange {
     RE::FormID GetWeaponFormID(std::string_view categoryName, int index);
     std::string_view GetWeaponFileName(std::string_view categoryName, int index);
     void SetSelectedShape(std::string_view categoryName, int index);
-    
+
+    RE::TESObjectWEAP* GetSelectedShapeForWeapon(RE::TESObjectWEAP* weapon);
+
 }
 

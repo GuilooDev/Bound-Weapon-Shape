@@ -1,6 +1,7 @@
 #include "logger.h"
 #include "UI.h"
 #include "ShapeChange.h"
+#include "Hooks.h"
 
 
 /*
@@ -31,6 +32,10 @@ SKSEPluginLoad(const SKSE::LoadInterface *skse) {
     UI::RegisterMenu();
     
     SKSE::GetMessagingInterface()->RegisterListener(OnDataLoadedMessage);
+
+    // On alloue de la mémoire pour notre hook
+    SKSE::AllocTrampoline(1 << 7);
+    Hooks::Install();
    
     return true;
 }
