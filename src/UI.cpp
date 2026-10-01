@@ -5,7 +5,6 @@
 #include "logger.h"
 
 namespace UI {
-    bool bCheck;
 
     std::vector<std::string_view> categoryOrder;
     std::unordered_map<std::string_view, int> selectedIndexByCategory;

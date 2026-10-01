@@ -80,7 +80,7 @@ namespace ShapeChange {
             }
         }
 
-        // Ordre Alphab�tique
+        // Ordre Alphabétique
         for (auto& [name, category] : categories) {
             SortWeaponsAlphabetically(category.weapons);
             logger::info("{} list contains {} entries", name, category.weapons.size());
